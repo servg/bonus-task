@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: Banking API
+  version: 1.0.0
+paths:
+  '/api/payment/{location}/{amount}':
+    get:
+      summary: Оплата покупки
+      parameters:
+        - name: location
+          in: path
+          required: true
+          description: Расположение - "Shop" или "Online"
+          schema:
+            type: string
+            enum: ["Shop", "Online"]
+        - name: amount
+          in: path
+          required: true
+          description: Сумма покупки
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Успешное завершение операции
+          content:
+            application/json:
+              example: {"status": "success", "message": "Payment successful"}
+        '400':
+          description: Ошибка в запросе, например, неверные параметры
+          content:
+            application/json:
+              example: {"status": "error", "message": "Bad Request"}
+        '404':
+          description: Ресурс не найден, например, некорректное расположение
+          content:
+            application/json:
+              example: {"status": "error", "message": "Resource not found"}
+        '402':
+          description: Недостаточно денег для оплаты
+          content:
+            application/json:
+              example: {"status": "error", "message": "Insufficient funds"}
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              example: {"status": "error", "message": "Internal Server Error"}
+  '/api/bankAccountOfEMoney':
+    get:
+      summary: Количество бонусов на счете банка
+      responses:
+        '200':
+          description: Успешное завершение операции
+          content:
+            application/json:
+              example: {"status": "success", "bonusCount": 150}
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              example: {"status": "error", "message": "Internal Server Error"}
+  '/api/money':
+    get:
+      summary: Количество безналичных денег
+      responses:
+        '200':
+          description: Успешное завершение операции
+          content:
+            application/json:
+              example: {"status": "success", "eMoneyAmount": 1000}
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              example: {"status": "error", "message": "Internal Server Error"}
+servers:
+  - url: /v1
